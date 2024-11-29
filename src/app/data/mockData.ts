@@ -56,4 +56,26 @@ export const users: { [key: string]: User } = {
       },
     ],
   },
+  autumn: {
+    username: 'autumn',
+    displayName: 'Autumn Lydon',
+    bio: 'Full-time lovergirl, Part-time developer',
+    links: [
+      {
+        id: '1',
+        title: 'Manifesto',
+        url: 'https://manifesto.autumnlydon.com',
+      },
+      {
+        id: '2',
+        title: 'Diary',
+        url: 'https://diary.autumnlydon.com',
+      },
+      {
+        id: '3',
+        title: 'X so I can make my bf famous',
+        url: 'https://x.com/autumnlydon',
+      },
+    ],
+  },
 }; 
