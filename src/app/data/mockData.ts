@@ -78,9 +78,9 @@ export const users: { [key: string]: User } = {
       },
     ],
   },bahij: {
-    username: 'autumn',
-    displayName: 'Autumn Lydon',
-    bio: 'Full-time lovergirl, Part-time developer',
+    username: 'bahij',
+    displayName: 'Bahij Nemeh',
+    bio: 'Full-time workaholic, Part-time loverboy',
     links: [
       {
         id: '1',
