@@ -85,17 +85,17 @@ export const users: { [key: string]: User } = {
       {
         id: '1',
         title: 'Manifesto',
-        url: 'https://manifesto.autumnlydon.com',
+        url: 'https://quark-vacation-3ef.notion.site/Tism-Manifesto-14dbd382bd66803fadb7dee4896244f9?pvs=4',
       },
       {
         id: '2',
-        title: 'Diary',
-        url: 'https://diary.autumnlydon.com',
+        title: 'My owner',
+        url: 'https://x.com/autumnlydon',
       },
       {
         id: '3',
-        title: 'X so I can make my bf famous',
-        url: 'https://x.com/autumnlydon',
+        title: 'X so I can become famous',
+        url: 'https://x.com/tismastic',
       },
     ],
   },
