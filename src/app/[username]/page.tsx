@@ -1,5 +1,6 @@
 import { users } from '../data/mockData';
 import LinkCard from '../components/LinkCard';
+import AnalyticsCard from '../components/AnalyticsCard';
 import Link from 'next/link';
 
 export default function UserPage({
@@ -30,12 +31,15 @@ export default function UserPage({
 
   return (
     <div className="min-h-screen flex flex-col items-center p-4 bg-gradient-to-br from-purple-500 to-pink-500">
-      <div className="w-full max-w-md py-8">
+      <div className="w-full max-w-3xl py-8">
         <div className="text-center mb-8">
+          <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/20 border-2 border-white/30" />
           <p className="text-white/70 text-lg mb-1">@{user.username}</p>
           <h1 className="text-3xl font-bold text-white mb-2">{user.displayName}</h1>
           <p className="text-white/90">{user.bio}</p>
         </div>
+
+        <AnalyticsCard analytics={user.analytics} />
 
         <div className="space-y-3">
           {user.links.map((link) => (
