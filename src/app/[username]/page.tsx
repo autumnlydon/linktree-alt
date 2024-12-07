@@ -32,6 +32,7 @@ export default function UserPage({
     <div className="min-h-screen flex flex-col items-center p-4 bg-gradient-to-br from-purple-500 to-pink-500">
       <div className="w-full max-w-md py-8">
         <div className="text-center mb-8">
+          <p className="text-white/70 text-lg mb-1">@{user.username}</p>
           <h1 className="text-3xl font-bold text-white mb-2">{user.displayName}</h1>
           <p className="text-white/90">{user.bio}</p>
         </div>
