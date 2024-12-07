@@ -46,7 +46,7 @@ export default function Home() {
           </div>
         </form>
         <p className="text-sm text-white/70 text-center mt-4">
-          Try with usernames: john or jane
+          Try with usernames: autumn or bahij
         </p>
       </div>
 
