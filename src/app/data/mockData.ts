@@ -51,8 +51,8 @@ export const users: { [key: string]: User } = {
       },
       {
         id: '3',
-        title: 'Twitter',
-        url: 'https://twitter.com/janesmith',
+        title: 'X',
+        url: 'https://x.com/janesmith',
       },
     ],
   },
