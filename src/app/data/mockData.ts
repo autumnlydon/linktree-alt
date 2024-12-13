@@ -42,7 +42,7 @@ export const users: { [key: string]: User } = {
       {
         id: '1',
         title: 'Portfolio',
-        url: 'https://janesmith.design',
+        url: 'https://janesmith.com',
       },
       {
         id: '2',
