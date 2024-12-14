@@ -1,7 +1,5 @@
 import { users } from '../data/mockData';
 import LinkCard from '../components/LinkCard';
-import AnalyticsCard from '../components/AnalyticsCard';
-import AnalyticsChart from '../components/AnalyticsChart';
 import Link from 'next/link';
 
 export default function UserPage({
@@ -37,11 +35,14 @@ export default function UserPage({
           <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/20 border-2 border-white/30" />
           <p className="text-white/70 text-lg mb-1">@{user.username}</p>
           <h1 className="text-3xl font-bold text-white mb-2">{user.displayName}</h1>
-          <p className="text-white/90">{user.bio}</p>
+          <p className="text-white/90 mb-4">{user.bio}</p>
+          <Link
+            href={`/${user.username}/analytics`}
+            className="inline-block px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white text-sm transition-all"
+          >
+            View Analytics →
+          </Link>
         </div>
-
-        <AnalyticsCard analytics={user.analytics} />
-        <AnalyticsChart analytics={user.analytics} />
 
         <div className="space-y-3">
           {user.links.map((link) => (
