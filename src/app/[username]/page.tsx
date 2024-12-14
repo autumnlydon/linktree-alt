@@ -1,6 +1,7 @@
 import { users } from '../data/mockData';
 import LinkCard from '../components/LinkCard';
 import AnalyticsCard from '../components/AnalyticsCard';
+import AnalyticsChart from '../components/AnalyticsChart';
 import Link from 'next/link';
 
 export default function UserPage({
@@ -40,6 +41,7 @@ export default function UserPage({
         </div>
 
         <AnalyticsCard analytics={user.analytics} />
+        <AnalyticsChart analytics={user.analytics} />
 
         <div className="space-y-3">
           {user.links.map((link) => (

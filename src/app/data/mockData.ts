@@ -10,6 +10,16 @@ export interface Analytics {
   popularityRank: number;
   linkClicks: number;
   lastUpdated: string;
+  trends: {
+    viewsChange: number; // percentage change
+    rankChange: number; // position change
+    clicksChange: number; // percentage change
+  };
+  history: {
+    date: string;
+    views: number;
+    clicks: number;
+  }[];
 }
 
 export interface User {
@@ -29,7 +39,21 @@ export const users: { [key: string]: User } = {
       totalViews: 1234,
       popularityRank: 15,
       linkClicks: 847,
-      lastUpdated: '2024-01-12T15:30:00Z'
+      lastUpdated: '2024-01-12T15:30:00Z',
+      trends: {
+        viewsChange: 12.5,
+        rankChange: 2,
+        clicksChange: 8.3
+      },
+      history: [
+        { date: '2024-01-06', views: 180, clicks: 120 },
+        { date: '2024-01-07', views: 220, clicks: 150 },
+        { date: '2024-01-08', views: 240, clicks: 160 },
+        { date: '2024-01-09', views: 200, clicks: 140 },
+        { date: '2024-01-10', views: 260, clicks: 180 },
+        { date: '2024-01-11', views: 280, clicks: 190 },
+        { date: '2024-01-12', views: 310, clicks: 200 }
+      ]
     },
     links: [
       {
@@ -60,7 +84,21 @@ export const users: { [key: string]: User } = {
       totalViews: 2541,
       popularityRank: 8,
       linkClicks: 1432,
-      lastUpdated: '2024-01-12T15:30:00Z'
+      lastUpdated: '2024-01-12T15:30:00Z',
+      trends: {
+        viewsChange: 25.8,
+        rankChange: 3,
+        clicksChange: 15.2
+      },
+      history: [
+        { date: '2024-01-06', views: 320, clicks: 180 },
+        { date: '2024-01-07', views: 380, clicks: 220 },
+        { date: '2024-01-08', views: 420, clicks: 260 },
+        { date: '2024-01-09', views: 380, clicks: 240 },
+        { date: '2024-01-10', views: 460, clicks: 280 },
+        { date: '2024-01-11', views: 520, clicks: 320 },
+        { date: '2024-01-12', views: 580, clicks: 350 }
+      ]
     },
     links: [
       {
@@ -91,7 +129,21 @@ export const users: { [key: string]: User } = {
       totalViews: 3876,
       popularityRank: 3,
       linkClicks: 2145,
-      lastUpdated: '2024-01-12T15:30:00Z'
+      lastUpdated: '2024-01-12T15:30:00Z',
+      trends: {
+        viewsChange: 45.2,
+        rankChange: 5,
+        clicksChange: 32.1
+      },
+      history: [
+        { date: '2024-01-06', views: 480, clicks: 280 },
+        { date: '2024-01-07', views: 520, clicks: 320 },
+        { date: '2024-01-08', views: 620, clicks: 380 },
+        { date: '2024-01-09', views: 580, clicks: 340 },
+        { date: '2024-01-10', views: 680, clicks: 420 },
+        { date: '2024-01-11', views: 780, clicks: 480 },
+        { date: '2024-01-12', views: 840, clicks: 520 }
+      ]
     },
     links: [
       {
@@ -122,7 +174,21 @@ export const users: { [key: string]: User } = {
       totalViews: 1543,
       popularityRank: 12,
       linkClicks: 892,
-      lastUpdated: '2024-01-12T15:30:00Z'
+      lastUpdated: '2024-01-12T15:30:00Z',
+      trends: {
+        viewsChange: -5.2,
+        rankChange: -2,
+        clicksChange: -3.1
+      },
+      history: [
+        { date: '2024-01-06', views: 280, clicks: 160 },
+        { date: '2024-01-07', views: 260, clicks: 150 },
+        { date: '2024-01-08', views: 240, clicks: 140 },
+        { date: '2024-01-09', views: 220, clicks: 130 },
+        { date: '2024-01-10', views: 200, clicks: 120 },
+        { date: '2024-01-11', views: 180, clicks: 110 },
+        { date: '2024-01-12', views: 160, clicks: 100 }
+      ]
     },
     links: [
       {
