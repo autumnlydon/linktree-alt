@@ -33,7 +33,12 @@ export default function UserPage({
       <div className="w-full max-w-3xl py-8">
         <div className="text-center mb-8">
           <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/20 border-2 border-white/30" />
-          <p className="text-white/70 text-lg mb-1">@{user.username}</p>
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <p className="text-white/70 text-lg">@{user.username}</p>
+            <span className="px-2 py-0.5 bg-white/10 rounded-full text-sm text-white/90">
+              Rank #{user.analytics.popularityRank}
+            </span>
+          </div>
           <h1 className="text-3xl font-bold text-white mb-2">{user.displayName}</h1>
           <p className="text-white/90 mb-4">{user.bio}</p>
           <Link
