@@ -46,12 +46,16 @@ export default function Home() {
 
         {/* Center content */}
         <div className="flex-1 max-w-3xl">
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-white mb-4">
-              Share Your Links
+          <div className="text-center mb-16">
+            <h1 className="text-7xl font-bold text-white mb-2 tracking-tight">
+              linkli
             </h1>
-            <p className="text-xl text-white/90 mb-8">
-              One simple page for all your important links. Easy to set up, easy to share.
+            <div className="h-1 w-24 bg-white/20 mx-auto mb-8 rounded-full" />
+            <p className="text-2xl text-white/90 font-light">
+              One simple page for all your important links.
+            </p>
+            <p className="text-lg text-white/70">
+              Easy to set up, easy to share.
             </p>
           </div>
 
