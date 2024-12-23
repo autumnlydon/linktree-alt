@@ -1,69 +1,124 @@
-import { users } from '../data/mockData';
-import LinkCard from '../components/LinkCard';
-import Link from 'next/link';
+'use client';
 
-export default function UserPage({
-  params,
+import { useEffect, useState } from 'react';
+import { supabase } from '@/utils/supabaseClient';
+import UserLinks from '@/components/UserLinks';
+import AddLinkForm from '@/components/AddLinkForm';
+import { useRouter } from 'next/navigation';
+
+interface Profile {
+  id: string;
+  username: string;
+  email: string;
+  bio?: string;
+  avatar_url?: string;
+}
+
+export default function ProfilePage({
+  params: { username },
 }: {
   params: { username: string };
 }) {
-  const user = users[params.username.toLowerCase()];
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
+  const router = useRouter();
 
-  if (!user) {
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        // Get profile data
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('username', username.toLowerCase())
+          .single();
+
+        if (profileError) throw profileError;
+        if (!profileData) throw new Error('Profile not found');
+
+        setProfile(profileData);
+
+        // Check if current user is the profile owner
+        const { data: { user } } = await supabase.auth.getUser();
+        setIsOwner(user?.id === profileData.id);
+      } catch (error: any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [username]);
+
+  if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-pink-500">
-        <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">User Not Found</h1>
-          <p className="text-gray-600 mb-6">
-            Sorry, this user does not exist in our system.
-          </p>
-          <Link
-            href="/"
-            className="inline-block py-2 px-4 bg-purple-600 text-white font-medium rounded-md hover:bg-purple-700 transition-colors"
-          >
-            Go Back Home
-          </Link>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500">
+        <div className="text-white/70">Loading profile...</div>
+      </div>
+    );
+  }
+
+  if (error || !profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500">
+        <div className="text-white/90">Profile not found</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-4 bg-gradient-to-br from-purple-500 to-pink-500">
-      <div className="w-full max-w-3xl py-8">
-        <div className="text-center mb-8">
-          <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/20 border-2 border-white/30" />
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <p className="text-white/70 text-lg">@{user.username}</p>
-            <span className="px-2 py-0.5 bg-white/10 rounded-full text-sm text-white/90">
-              Rank #{user.analytics.popularityRank}
-            </span>
+    <main className="min-h-screen bg-gradient-to-br from-purple-500 to-pink-500 py-8">
+      <div className="max-w-2xl mx-auto px-4">
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 mb-8">
+          <div className="flex items-center gap-6 mb-6">
+            {profile.avatar_url ? (
+              <img
+                src={profile.avatar_url}
+                alt={profile.username}
+                className="w-24 h-24 rounded-full border-2 border-white/20"
+              />
+            ) : (
+              <div className="w-24 h-24 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center text-white/60 text-2xl font-medium">
+                {profile.username[0].toUpperCase()}
+              </div>
+            )}
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">
+                @{profile.username}
+              </h1>
+              {profile.bio && (
+                <p className="text-white/80">{profile.bio}</p>
+              )}
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">{user.displayName}</h1>
-          <p className="text-white/90 mb-4">{user.bio}</p>
-          <Link
-            href={`/${user.username}/analytics`}
-            className="inline-block px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white text-sm transition-all"
-          >
-            View Analytics →
-          </Link>
+
+          {isOwner && (
+            <div className="flex gap-4 mb-8">
+              <button
+                onClick={() => router.push(`/edit-profile/${profile.username}`)}
+                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg border border-white/20 transition-colors"
+              >
+                Edit Profile
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="space-y-3">
-          {user.links.map((link) => (
-            <LinkCard key={link.id} link={link} />
-          ))}
-        </div>
+        {isOwner && (
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 mb-8">
+            <h2 className="text-xl font-semibold text-white mb-6">Add New Link</h2>
+            <AddLinkForm onSuccess={() => router.refresh()} />
+          </div>
+        )}
 
-        <div className="mt-8 text-center">
-          <Link
-            href="/"
-            className="text-white/90 hover:text-white transition-colors"
-          >
-            ← Back to Home
-          </Link>
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+          <h2 className="text-xl font-semibold text-white mb-6">Links</h2>
+          <UserLinks userId={profile.id} isOwner={isOwner} />
         </div>
       </div>
-    </div>
+    </main>
   );
 } 
