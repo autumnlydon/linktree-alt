@@ -39,14 +39,21 @@ export default function EditProfileForm({
       const fileExt = file.name.split('.').pop();
       const filePath = `${profile.id}/avatar.${fileExt}`;
 
-      // Upload file to Supabase Storage
+      console.log('Uploading file:', { filePath, fileType: file.type, fileSize: file.size });
+
+      // Upload new file
       const { error: uploadError, data } = await supabase.storage
         .from('avatars')
         .upload(filePath, file, {
           upsert: true,
         });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('Upload successful:', data);
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
@@ -59,12 +66,16 @@ export default function EditProfileForm({
         .update({ avatar_url: publicUrl })
         .eq('id', profile.id);
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        console.error('Profile update error:', updateError);
+        throw updateError;
+      }
 
       // Update local state
       setProfile(prev => prev ? { ...prev, avatar_url: publicUrl } : null);
       setUploadProgress(100);
     } catch (error: any) {
+      console.error('Full error details:', error);
       setError(error.message);
       setUploadProgress(0);
     }
