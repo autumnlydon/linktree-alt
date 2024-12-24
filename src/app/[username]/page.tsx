@@ -76,6 +76,14 @@ export default function ProfilePage() {
       <Navigation />
       
       <div className="max-w-2xl mx-auto px-4 py-8">
+        <button
+          onClick={() => router.push('/')}
+          className="text-white/80 hover:text-white mb-6 flex items-center gap-2"
+        >
+          <span className="text-lg">←</span>
+          <span>Back to Home</span>
+        </button>
+
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 mb-8">
           <div className="flex items-center gap-6 mb-6">
             {profile.avatar_url ? (

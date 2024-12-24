@@ -261,6 +261,14 @@ export default function EditProfileForm({
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-500 to-pink-500 py-8">
       <div className="max-w-2xl mx-auto px-4">
+        <button
+          onClick={() => router.push(`/${profile?.username}`)}
+          className="text-white/80 hover:text-white mb-6 flex items-center gap-2"
+        >
+          <span className="text-lg">←</span>
+          <span>Back to Profile</span>
+        </button>
+
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
           <h1 className="text-2xl font-bold text-white mb-6">Edit Profile</h1>
 
