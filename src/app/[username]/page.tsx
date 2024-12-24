@@ -5,6 +5,7 @@ import { supabase } from '@/utils/supabaseClient';
 import UserLinks from '@/components/UserLinks';
 import AddLinkForm from '@/components/AddLinkForm';
 import { useRouter, useParams } from 'next/navigation';
+import Navigation from '@/components/Navigation';
 
 interface Profile {
   id: string;
@@ -12,6 +13,7 @@ interface Profile {
   email: string;
   bio?: string;
   avatar_url?: string;
+  avatar_position?: { x: number; y: number; scale: number };
 }
 
 export default function ProfilePage() {
@@ -70,16 +72,23 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-500 to-pink-500 py-8">
-      <div className="max-w-2xl mx-auto px-4">
+    <main className="min-h-screen bg-gradient-to-br from-purple-500 to-pink-500">
+      <Navigation />
+      
+      <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 mb-8">
           <div className="flex items-center gap-6 mb-6">
             {profile.avatar_url ? (
-              <img
-                src={profile.avatar_url}
-                alt={profile.username}
-                className="w-24 h-24 rounded-full border-2 border-white/20"
-              />
+              <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/20">
+                <img
+                  src={profile.avatar_url}
+                  alt={profile.username}
+                  className="w-full h-full object-cover"
+                  style={profile.avatar_position ? {
+                    transform: `translate(${profile.avatar_position.x}px, ${profile.avatar_position.y}px) scale(${profile.avatar_position.scale})`,
+                  } : undefined}
+                />
+              </div>
             ) : (
               <div className="w-24 h-24 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center text-white/60 text-2xl font-medium">
                 {profile.username[0].toUpperCase()}

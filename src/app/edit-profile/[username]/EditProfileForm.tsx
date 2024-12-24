@@ -11,6 +11,13 @@ interface Profile {
   email: string;
   bio?: string;
   avatar_url?: string;
+  avatar_position?: { x: number; y: number; scale: number };
+}
+
+interface ImagePosition {
+  x: number;
+  y: number;
+  scale: number;
 }
 
 export default function EditProfileForm({
@@ -23,7 +30,68 @@ export default function EditProfileForm({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [imagePosition, setImagePosition] = useState<ImagePosition>({ x: 0, y: 0, scale: 1 });
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const router = useRouter();
+
+  // Initialize position from profile data
+  useEffect(() => {
+    if (profile?.avatar_position) {
+      setImagePosition(profile.avatar_position);
+    }
+  }, [profile?.avatar_position]);
+
+  // Cleanup preview URL when component unmounts
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  const handleImageMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggingImage(true);
+    setDragStart({
+      x: e.clientX - imagePosition.x,
+      y: e.clientY - imagePosition.y
+    });
+  };
+
+  const handleImageMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDraggingImage) return;
+    
+    const newX = e.clientX - dragStart.x;
+    const newY = e.clientY - dragStart.y;
+    
+    // Limit the dragging range
+    const maxOffset = 100; // Adjust this value to control how far the image can be dragged
+    const boundedX = Math.max(-maxOffset, Math.min(maxOffset, newX));
+    const boundedY = Math.max(-maxOffset, Math.min(maxOffset, newY));
+    
+    setImagePosition(prev => ({
+      ...prev,
+      x: boundedX,
+      y: boundedY
+    }));
+  };
+
+  const handleImageMouseUp = () => {
+    setIsDraggingImage(false);
+  };
+
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const scaleChange = e.deltaY * -0.001;
+    const newScale = Math.max(1, Math.min(2, imagePosition.scale + scaleChange));
+    setImagePosition(prev => ({
+      ...prev,
+      scale: newScale
+    }));
+  };
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!profile || acceptedFiles.length === 0) return;
@@ -33,6 +101,16 @@ export default function EditProfileForm({
       setError('Please upload an image file');
       return;
     }
+
+    // Reset position when new image is uploaded
+    setImagePosition({ x: 0, y: 0, scale: 1 });
+
+    // Create and set preview URL
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    const preview = URL.createObjectURL(file);
+    setPreviewUrl(preview);
 
     try {
       setUploadProgress(0);
@@ -60,10 +138,13 @@ export default function EditProfileForm({
         .from('avatars')
         .getPublicUrl(filePath);
 
-      // Update profile with new avatar URL
+      // Update profile with new avatar URL and position
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({ avatar_url: publicUrl })
+        .update({
+          avatar_url: publicUrl,
+          avatar_position: imagePosition
+        })
         .eq('id', profile.id);
 
       if (updateError) {
@@ -72,14 +153,20 @@ export default function EditProfileForm({
       }
 
       // Update local state
-      setProfile(prev => prev ? { ...prev, avatar_url: publicUrl } : null);
+      setProfile(prev => prev ? {
+        ...prev,
+        avatar_url: publicUrl,
+        avatar_position: imagePosition
+      } : null);
       setUploadProgress(100);
+      // Clear preview URL after successful upload
+      setPreviewUrl(null);
     } catch (error: any) {
       console.error('Full error details:', error);
       setError(error.message);
       setUploadProgress(0);
     }
-  }, [profile]);
+  }, [profile, previewUrl, imagePosition]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -188,26 +275,40 @@ export default function EditProfileForm({
               <label className="block text-sm font-medium text-white/90 mb-1">
                 Profile Picture
               </label>
+              <div className="text-center text-white/70 text-sm mb-2">
+                <p>Scroll to zoom • Drag to adjust position</p>
+              </div>
               <div
                 {...getRootProps()}
-                className={`w-full h-40 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors ${
+                className={`w-40 h-40 mx-auto border-2 border-dashed rounded-full flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden ${
                   isDragActive ? 'border-white bg-white/10' : 'border-white/20 hover:border-white/40'
                 }`}
+                onMouseDown={handleImageMouseDown}
+                onMouseMove={handleImageMouseMove}
+                onMouseUp={handleImageMouseUp}
+                onMouseLeave={handleImageMouseUp}
+                onWheel={handleWheel}
               >
                 <input {...getInputProps()} />
-                {profile.avatar_url ? (
+                {(previewUrl || profile?.avatar_url) ? (
                   <div className="relative w-full h-full">
                     <img
-                      src={profile.avatar_url}
+                      src={previewUrl || profile?.avatar_url}
                       alt="Profile"
-                      className="w-full h-full object-cover rounded-lg"
+                      className="absolute w-full h-full object-cover select-none"
+                      style={{
+                        transform: `translate(${imagePosition.x}px, ${imagePosition.y}px) scale(${imagePosition.scale})`,
+                        transition: isDraggingImage ? 'none' : 'transform 0.1s ease-out'
+                      }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity rounded-lg">
-                      <p className="text-white text-sm">Drop a new image or click to change</p>
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity">
+                      <p className="text-white text-sm text-center px-2">
+                        Drop a new image or click to change
+                      </p>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center">
+                  <div className="text-center p-4">
                     <p className="text-white/90 text-sm mb-1">
                       {isDragActive ? 'Drop the image here' : 'Drag and drop an image here'}
                     </p>
@@ -216,7 +317,7 @@ export default function EditProfileForm({
                 )}
               </div>
               {uploadProgress > 0 && uploadProgress < 100 && (
-                <div className="mt-2">
+                <div className="mt-2 w-40 mx-auto">
                   <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-white transition-all duration-300"

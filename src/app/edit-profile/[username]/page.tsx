@@ -1,4 +1,5 @@
 import EditProfileForm from './EditProfileForm';
+import Navigation from '@/components/Navigation';
 import { Suspense } from 'react';
 
 export default async function EditProfilePage({
@@ -9,8 +10,11 @@ export default async function EditProfilePage({
   const resolvedParams = await Promise.resolve(params);
   
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <EditProfileForm username={resolvedParams.username} />
-    </Suspense>
+    <div className="min-h-screen bg-gradient-to-br from-purple-500 to-pink-500">
+      <Navigation />
+      <Suspense fallback={<div>Loading...</div>}>
+        <EditProfileForm username={resolvedParams.username} />
+      </Suspense>
+    </div>
   );
 } 

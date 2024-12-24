@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import Auth from '@/components/Auth';
+import Navigation from '@/components/Navigation';
 
 interface TopProfile {
   username: string;
@@ -12,10 +13,10 @@ interface TopProfile {
 
 export default function Home() {
   const [username, setUsername] = useState('');
-  const [showAuth, setShowAuth] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
   const [topProfiles, setTopProfiles] = useState<TopProfile[]>([]);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const view = searchParams.get('view');
 
   useEffect(() => {
     const fetchTopProfiles = async () => {
@@ -47,40 +48,18 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col bg-gradient-to-br from-purple-500 to-pink-500">
-      {/* Navigation */}
-      <nav className="w-full px-4 py-4">
-        <div className="max-w-6xl mx-auto flex justify-end gap-4">
-          <button
-            onClick={() => {
-              setIsSignUp(false);
-              setShowAuth(true);
-            }}
-            className="px-4 py-2 text-white/90 hover:text-white transition-colors"
-          >
-            Log in
-          </button>
-          <button
-            onClick={() => {
-              setIsSignUp(true);
-              setShowAuth(true);
-            }}
-            className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full border border-white/20 transition-all"
-          >
-            Sign up
-          </button>
-        </div>
-      </nav>
+      <Navigation />
 
       <div className="flex-1 flex flex-col items-center justify-center p-4">
-        {showAuth ? (
+        {view === 'sign-in' || view === 'sign-up' ? (
           <div className="w-full max-w-md">
             <button
-              onClick={() => setShowAuth(false)}
+              onClick={() => router.push('/')}
               className="text-white/80 hover:text-white mb-6"
             >
               ← Back
             </button>
-            <Auth initialView={isSignUp ? 'sign-up' : 'sign-in'} />
+            <Auth initialView={view === 'sign-up' ? 'sign-up' : 'sign-in'} />
           </div>
         ) : (
           <>
