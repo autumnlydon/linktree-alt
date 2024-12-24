@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import UserLinks from '@/components/UserLinks';
 import AddLinkForm from '@/components/AddLinkForm';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 interface Profile {
   id: string;
@@ -14,11 +14,9 @@ interface Profile {
   avatar_url?: string;
 }
 
-export default function ProfilePage({
-  params: { username },
-}: {
-  params: { username: string };
-}) {
+export default function ProfilePage() {
+  const params = useParams();
+  const username = params.username as string;
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,7 +48,9 @@ export default function ProfilePage({
       }
     };
 
-    fetchProfile();
+    if (username) {
+      fetchProfile();
+    }
   }, [username]);
 
   if (loading) {

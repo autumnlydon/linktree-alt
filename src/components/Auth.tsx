@@ -28,10 +28,11 @@ export default function Auth({ initialView = 'sign-in' }: AuthProps) {
 
     try {
       if (isSignUp) {
+        // Check if username is taken
         const { data: existingUser } = await supabase
           .from('profiles')
           .select('username')
-          .eq('username', username)
+          .eq('username', username.toLowerCase())
           .single();
 
         if (existingUser) {
@@ -40,51 +41,67 @@ export default function Auth({ initialView = 'sign-in' }: AuthProps) {
           return;
         }
 
+        // Sign up with email, password, and store username in metadata
+        console.log('Starting signup process with username:', username.toLowerCase());
         const { data, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback`,
             data: {
-              username,
-            },
-          },
+              username: username.toLowerCase(),
+              full_name: username.toLowerCase()
+            }
+          }
         });
 
-        if (signUpError) throw signUpError;
+        if (signUpError) {
+          console.error('Signup error:', signUpError);
+          throw signUpError;
+        }
 
         if (data.user) {
-          await supabase.from('profiles').insert([
-            {
-              id: data.user.id,
-              username,
-              email,
-            },
-          ]);
-          setSuccessMessage('Please check your email to confirm your account. You can close this window after confirming.');
+          console.log('User created:', data.user.id);
+          console.log('User metadata:', data.user.user_metadata);
+          setSuccessMessage(
+            'Please check your email to confirm your account. You can close this window after confirming.'
+          );
           // Clear form
           setEmail('');
           setPassword('');
           setUsername('');
         }
       } else {
+        // Handle sign in
         const { data, error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
 
-        if (signInError) throw signInError;
+        if (signInError) {
+          console.error('Sign in error:', signInError);
+          throw signInError;
+        }
 
         if (data.user) {
-          const { data: profile } = await supabase
+          // Get user's profile
+          const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('username')
             .eq('id', data.user.id)
             .single();
-            
-          if (profile) {
-            window.location.href = `/${profile.username}`;
+
+          if (profileError) {
+            console.error('Profile fetch error:', profileError);
+            throw new Error('Failed to fetch profile');
           }
+
+          if (!profile) {
+            throw new Error('Profile not found');
+          }
+
+          // Redirect to profile page
+          window.location.href = `/${profile.username}`;
         }
       }
     } catch (error: any) {
@@ -117,7 +134,7 @@ export default function Auth({ initialView = 'sign-in' }: AuthProps) {
             <input
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value.toLowerCase())}
               className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40"
               required
             />
@@ -131,7 +148,7 @@ export default function Auth({ initialView = 'sign-in' }: AuthProps) {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value.toLowerCase())}
             className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40"
             required
           />

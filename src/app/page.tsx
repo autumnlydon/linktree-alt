@@ -18,66 +18,6 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check for authenticated user
-    const checkUser = async () => {
-      try {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        
-        if (authError) {
-          console.error('Auth error:', authError);
-          return;
-        }
-
-        if (user) {
-          console.log('User found:', user.id);
-          // Get user's profile
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('username')
-            .eq('id', user.id)
-            .single();
-            
-          if (profileError) {
-            console.log('No profile found, creating one...');
-            // Create a profile if it doesn't exist
-            const { data: newProfile, error: createError } = await supabase
-              .from('profiles')
-              .insert([
-                {
-                  id: user.id,
-                  username: user.email?.split('@')[0] || `user_${user.id.slice(0, 8)}`,
-                  email: user.email
-                }
-              ])
-              .select('username')
-              .single();
-
-            if (createError) {
-              console.error('Error creating profile:', createError);
-              return;
-            }
-
-            if (newProfile) {
-              console.log('New profile created:', newProfile);
-              router.push(`/${newProfile.username}`);
-            }
-            return;
-          }
-
-          if (profile) {
-            console.log('Profile found:', profile);
-            router.push(`/${profile.username}`);
-          }
-        }
-      } catch (error) {
-        console.error('Unexpected error:', error);
-      }
-    };
-
-    checkUser();
-  }, [router]);
-
-  useEffect(() => {
     const fetchTopProfiles = async () => {
       const { data } = await supabase
         .from('profiles')
