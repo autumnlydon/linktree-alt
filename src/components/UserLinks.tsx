@@ -46,17 +46,21 @@ export default function UserLinks({ userId, isOwner = false }: UserLinksProps) {
 
   const handleClick = async (link: Link) => {
     try {
-      const { error } = await supabase
-        .from('links')
-        .update({ click_count: link.click_count + 1 })
-        .eq('id', link.id);
+      setLinks(links.map(l => 
+        l.id === link.id ? { ...l, click_count: (l.click_count || 0) + 1 } : l
+      ));
 
-      if (error) throw error;
+      const { error } = await supabase.rpc('increment_link_clicks', {
+        link_id: link.id
+      });
+
+      if (error) {
+        console.error('Error updating click count:', error);
+        setLinks(links);
+        throw error;
+      }
 
       window.open(link.url, '_blank');
-      setLinks(links.map(l => 
-        l.id === link.id ? { ...l, click_count: l.click_count + 1 } : l
-      ));
     } catch (error: any) {
       console.error('Error updating click count:', error);
     }
