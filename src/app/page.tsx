@@ -47,7 +47,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-gradient-to-br from-purple-500 to-pink-500">
+    <main className="min-h-screen flex flex-col bg-gradient-to-br from-sky-400/80 to-blue-500/80">
       <Navigation />
 
       {view === 'sign-in' || view === 'sign-up' ? (
@@ -67,31 +67,32 @@ export default function Home() {
           {/* Hero Section */}
           <section className="flex-1 flex flex-col items-center justify-center px-4 py-16">
             <div className="w-full max-w-3xl mx-auto text-center">
-              <h1 className="text-8xl font-bold text-white mb-3 tracking-tight">
+              <h1 className="text-8xl font-bold text-white/90 mb-3 tracking-tight">
                 linkli
               </h1>
-              <div className="h-1 w-32 bg-white/20 mx-auto mb-10 rounded-full" />
-              <p className="text-3xl text-white/90 font-light mb-2">
+              <div className="h-1 w-32 bg-white/10 mx-auto mb-10 rounded-full" />
+              <p className="text-3xl text-white/80 font-light mb-2">
                 One simple page for all your important links.
               </p>
-              <p className="text-xl text-white/70 mb-12">
+              <p className="text-xl text-white/60 mb-12">
                 Easy to set up, easy to share.
               </p>
 
               <form onSubmit={handleSubmit} className="relative mb-16 max-w-xl mx-auto">
-                <div className="relative">
+                <div className="relative group">
+                  <div className="absolute -inset-0.5 bg-white/20 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-200"></div>
                   <input
                     type="text"
                     id="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Enter a username"
-                    className="w-full px-7 py-5 text-lg border-2 border-white/20 bg-white/10 rounded-full text-white placeholder-white/60 focus:outline-none focus:border-white/40 pr-36"
+                    className="relative w-full px-7 py-5 text-lg border-2 border-white/20 bg-white/10 rounded-full text-white placeholder-white/50 focus:outline-none focus:border-white/30 pr-36 backdrop-blur-sm"
                     required
                   />
                   <button
                     type="submit"
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 px-7 py-3 bg-white text-purple-600 rounded-full font-medium hover:bg-opacity-90 transition-colors"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 px-7 py-3 bg-white/90 text-blue-500 rounded-full font-medium hover:bg-white transition-colors"
                   >
                     View Page
                   </button>
@@ -99,29 +100,29 @@ export default function Home() {
               </form>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center border border-white/20">
-                  <h3 className="text-xl font-semibold text-white mb-2">Simple Setup</h3>
-                  <p className="text-white/80">Create your page in seconds, no sign up required</p>
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-white/10 hover:bg-white/10 transition-colors">
+                  <h3 className="text-xl font-semibold text-white/90 mb-2">Simple Setup</h3>
+                  <p className="text-white/70">Create your page in seconds, no sign up required</p>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center border border-white/20">
-                  <h3 className="text-xl font-semibold text-white mb-2">All Your Links</h3>
-                  <p className="text-white/80">Showcase your social media, portfolio, and more</p>
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-white/10 hover:bg-white/10 transition-colors">
+                  <h3 className="text-xl font-semibold text-white/90 mb-2">All Your Links</h3>
+                  <p className="text-white/70">Showcase your social media, portfolio, and more</p>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center border border-white/20">
-                  <h3 className="text-xl font-semibold text-white mb-2">Share Easily</h3>
-                  <p className="text-white/80">One link to share all your online presence</p>
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 text-center border border-white/10 hover:bg-white/10 transition-colors">
+                  <h3 className="text-xl font-semibold text-white/90 mb-2">Share Easily</h3>
+                  <p className="text-white/70">One link to share all your online presence</p>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Stats Section */}
-          <section className="bg-white/5 backdrop-blur-sm border-t border-white/10">
+          <section className="bg-gradient-to-b from-blue-500/50 to-blue-600/50 border-t border-white/5">
             <div className="max-w-6xl mx-auto px-4 py-16">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 {/* Top Profiles */}
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                  <h2 className="text-2xl font-semibold text-white mb-6">Top Profiles</h2>
+                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+                  <h2 className="text-2xl font-semibold text-white/90 mb-6">Top Profiles</h2>
                   <div className="space-y-4">
                     {topProfiles.map((profile, index) => (
                       <button
@@ -133,10 +134,10 @@ export default function Home() {
                           #{index + 1}
                         </span>
                         <div className="flex-1">
-                          <p className="text-white font-medium group-hover:text-white/90">
+                          <p className="text-white/90 font-medium group-hover:text-white">
                             @{profile.username}
                           </p>
-                          <p className="text-white/60 text-sm">
+                          <p className="text-white/50 text-sm">
                             {profile.total_views.toLocaleString()} views
                           </p>
                         </div>
@@ -146,20 +147,20 @@ export default function Home() {
                 </div>
 
                 {/* Platform Stats */}
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                  <h2 className="text-2xl font-semibold text-white mb-6">Platform Stats</h2>
+                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+                  <h2 className="text-2xl font-semibold text-white/90 mb-6">Platform Stats</h2>
                   <div className="space-y-6">
                     <div>
-                      <p className="text-white/60 text-sm mb-1">Total Links Created</p>
-                      <p className="text-3xl font-bold text-white">1,234</p>
+                      <p className="text-white/50 text-sm mb-1">Total Links Created</p>
+                      <p className="text-3xl font-bold text-white/90">1,234</p>
                     </div>
                     <div>
-                      <p className="text-white/60 text-sm mb-1">Total Link Clicks</p>
-                      <p className="text-3xl font-bold text-white">45.6K</p>
+                      <p className="text-white/50 text-sm mb-1">Total Link Clicks</p>
+                      <p className="text-3xl font-bold text-white/90">45.6K</p>
                     </div>
                     <div>
-                      <p className="text-white/60 text-sm mb-1">Active Users</p>
-                      <p className="text-3xl font-bold text-white">789</p>
+                      <p className="text-white/50 text-sm mb-1">Active Users</p>
+                      <p className="text-3xl font-bold text-white/90">789</p>
                     </div>
                   </div>
                 </div>
