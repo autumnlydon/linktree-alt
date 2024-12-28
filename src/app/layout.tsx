@@ -12,7 +12,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>LinkTree Alternative</title>
+        <title>linkli</title>
         <meta name="description" content="A simple and beautiful way to share your links" />
       </head>
       <body className={inter.className}>
