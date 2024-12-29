@@ -3,13 +3,15 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
-    const requestUrl = new URL(request.url);
-    const code = requestUrl.searchParams.get('code');
+    const searchParams = new URL(request.url).searchParams;
+    const code = searchParams.get('code');
 
     if (!code) {
-      throw new Error('No code provided');
+      return NextResponse.redirect(new URL('/?error=no_code_provided', request.url));
     }
 
     // Create a Supabase client with service role for admin operations
@@ -87,7 +89,7 @@ export async function GET(request: Request) {
     console.log('Profile created/updated successfully');
 
     // Redirect to the user's profile page
-    return NextResponse.redirect(`${requestUrl.origin}/${username}`);
+    return NextResponse.redirect(`${new URL(request.url).origin}/${username}`);
   } catch (error) {
     console.error('Callback error:', error);
     // Redirect to home page with error
