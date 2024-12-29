@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import Auth from '@/components/Auth';
-import Navigation from '@/components/Navigation';
+import Navigation from '../components/Navigation';
 
 interface TopProfile {
   username: string;
@@ -47,9 +47,11 @@ export default function Home() {
   };
 
   return (
-    <main className="relative bg-gradient-to-br from-sky-400/80 to-blue-500/80">
+    <main className="min-h-screen flex flex-col bg-gradient-to-br from-sky-400/80 to-blue-500/80">
+      <Navigation />
+
       {view === 'sign-in' || view === 'sign-up' ? (
-        <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="flex-1 flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <button
               onClick={() => router.push('/')}
@@ -63,60 +65,57 @@ export default function Home() {
       ) : (
         <>
           {/* Hero Section */}
-          <section className="min-h-screen flex flex-col">
-            <Navigation />
-            <div className="flex-1 flex flex-col items-center px-4">
-              <div className="w-full max-w-6xl mx-auto text-center">
-                <img 
-                  src="/icon.svg" 
-                  alt="linkli logo" 
-                  className="w-40 h-40 lg:w-48 lg:h-48 xl:w-56 xl:h-56 mx-auto -mt-12 mb-6 lg:mb-8 xl:mb-10 opacity-90 animate-fade-in"
-                />
-                <h1 className="text-7xl lg:text-8xl xl:text-9xl font-bold text-white/90 mb-2 tracking-tight">
-                  linkli
-                </h1>
-                <div className="h-1 w-32 lg:w-40 xl:w-48 bg-white/10 mx-auto mb-6 lg:mb-8 xl:mb-10 rounded-full" />
-                <p className="text-2xl lg:text-3xl xl:text-4xl text-white/80 font-light mb-2">
-                  One simple page for all your important links.
-                </p>
-                <p className="text-lg lg:text-xl xl:text-2xl text-white/60 mb-6 lg:mb-8 xl:mb-10">
-                  Easy to set up, easy to share.
-                </p>
+          <section className="flex-1 flex flex-col items-center justify-start px-4 pb-16">
+            <div className="w-full max-w-6xl mx-auto text-center">
+              <img 
+                src="/icon.svg" 
+                alt="linkli logo" 
+                className="w-40 h-40 lg:w-48 lg:h-48 xl:w-56 xl:h-56 mx-auto -mt-12 mb-6 lg:mb-8 xl:mb-10 opacity-90 animate-fade-in"
+              />
+              <h1 className="text-7xl lg:text-8xl xl:text-9xl font-bold text-white/90 mb-2 tracking-tight">
+                linkli
+              </h1>
+              <div className="h-1 w-32 lg:w-40 xl:w-48 bg-white/10 mx-auto mb-6 lg:mb-8 xl:mb-10 rounded-full" />
+              <p className="text-2xl lg:text-3xl xl:text-4xl text-white/80 font-light mb-2">
+                One simple page for all your important links.
+              </p>
+              <p className="text-lg lg:text-xl xl:text-2xl text-white/60 mb-6 lg:mb-8 xl:mb-10">
+                Easy to set up, easy to share.
+              </p>
 
-                <form onSubmit={handleSubmit} className="relative w-full max-w-xl lg:max-w-2xl xl:max-w-3xl mx-auto mb-8 lg:mb-10 xl:mb-12">
-                  <div className="relative group">
-                    <div className="absolute -inset-0.5 bg-white/20 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-200"></div>
-                    <input
-                      type="text"
-                      id="username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Enter a username"
-                      className="relative w-full px-7 py-5 lg:py-6 xl:py-7 text-lg lg:text-xl xl:text-2xl border-2 border-white/20 bg-white/10 rounded-full text-white placeholder-white/50 focus:outline-none focus:border-white/30 pr-36 lg:pr-40 xl:pr-44 backdrop-blur-sm"
-                      required
-                    />
-                    <button
-                      type="submit"
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 px-7 lg:px-8 xl:px-10 py-3 lg:py-4 xl:py-5 bg-white/90 text-blue-500 rounded-full font-medium hover:bg-white transition-colors text-lg lg:text-xl xl:text-2xl"
-                    >
-                      View Page
-                    </button>
-                  </div>
-                </form>
+              <form onSubmit={handleSubmit} className="relative w-full max-w-xl lg:max-w-2xl xl:max-w-3xl mx-auto mb-8 lg:mb-10 xl:mb-12">
+                <div className="relative group">
+                  <div className="absolute -inset-0.5 bg-white/20 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-200"></div>
+                  <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Enter a username"
+                    className="relative w-full px-7 py-5 lg:py-6 xl:py-7 text-lg lg:text-xl xl:text-2xl border-2 border-white/20 bg-white/10 rounded-full text-white placeholder-white/50 focus:outline-none focus:border-white/30 pr-36 lg:pr-40 xl:pr-44 backdrop-blur-sm"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 px-7 lg:px-8 xl:px-10 py-3 lg:py-4 xl:py-5 bg-white/90 text-blue-500 rounded-full font-medium hover:bg-white transition-colors text-lg lg:text-xl xl:text-2xl"
+                  >
+                    View Page
+                  </button>
+                </div>
+              </form>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 xl:gap-10 max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto">
-                  <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 lg:p-8 xl:p-10 text-center border border-white/10 hover:bg-white/10 transition-colors">
-                    <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold text-white/90 mb-2 lg:mb-3 xl:mb-4">Simple Setup</h3>
-                    <p className="text-base lg:text-lg xl:text-xl text-white/70">Create your page in seconds, no sign up required</p>
-                  </div>
-                  <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 lg:p-8 xl:p-10 text-center border border-white/10 hover:bg-white/10 transition-colors">
-                    <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold text-white/90 mb-2 lg:mb-3 xl:mb-4">All Your Links</h3>
-                    <p className="text-base lg:text-lg xl:text-xl text-white/70">Showcase your social media, portfolio, and more</p>
-                  </div>
-                  <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 lg:p-8 xl:p-10 text-center border border-white/10 hover:bg-white/10 transition-colors">
-                    <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold text-white/90 mb-2 lg:mb-3 xl:mb-4">Share Easily</h3>
-                    <p className="text-base lg:text-lg xl:text-xl text-white/70">One link to share all your online presence</p>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 xl:gap-10 max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto">
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 lg:p-8 xl:p-10 text-center border border-white/10 hover:bg-white/10 transition-colors">
+                  <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold text-white/90 mb-2 lg:mb-3 xl:mb-4">Simple Setup</h3>
+                  <p className="text-base lg:text-lg xl:text-xl text-white/70">Create your page in seconds, no sign up required</p>
+                </div>
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 lg:p-8 xl:p-10 text-center border border-white/10 hover:bg-white/10 transition-colors">
+                  <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold text-white/90 mb-2 lg:mb-3 xl:mb-4">All Your Links</h3>
+                  <p className="text-base lg:text-lg xl:text-xl text-white/70">Showcase your social media, portfolio, and more</p>
+                </div>
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 lg:p-8 xl:p-10 text-center border border-white/10 hover:bg-white/10 transition-colors">
+                  <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold text-white/90 mb-2 lg:mb-3 xl:mb-4">Share Easily</h3>
+                  <p className="text-base lg:text-lg xl:text-xl text-white/70">One link to share all your online presence</p>
                 </div>
               </div>
             </div>
