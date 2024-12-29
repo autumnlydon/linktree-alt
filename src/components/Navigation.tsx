@@ -51,19 +51,19 @@ export default function Navigation() {
   if (loading) return null;
 
   return (
-    <nav className="w-full px-4 py-4">
-      <div className="max-w-6xl mx-auto flex justify-end gap-4">
+    <nav className="w-full px-3 py-5 lg:px-4 lg:py-6">
+      <div className="max-w-[98%] mx-auto flex justify-end gap-4">
         {profile ? (
           <>
             <button
               onClick={() => router.push(`/${profile.username}`)}
-              className="px-4 py-2 text-white/90 hover:text-white transition-colors"
+              className="px-6 py-3 text-lg lg:text-xl text-white/90 hover:text-white transition-colors"
             >
               My Profile
             </button>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full border border-white/20 transition-all"
+              className="px-6 py-3 text-lg lg:text-xl bg-white/10 hover:bg-white/20 text-white rounded-full border border-white/20 transition-all"
             >
               Log Out
             </button>
@@ -72,13 +72,13 @@ export default function Navigation() {
           <>
             <button
               onClick={() => router.push('/?view=sign-in')}
-              className="px-4 py-2 text-white/90 hover:text-white transition-colors"
+              className="px-6 py-3 text-lg lg:text-xl text-white/90 hover:text-white transition-colors"
             >
               Log in
             </button>
             <button
               onClick={() => router.push('/?view=sign-up')}
-              className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full border border-white/20 transition-all"
+              className="px-6 py-3 text-lg lg:text-xl bg-white/10 hover:bg-white/20 text-white rounded-full border border-white/20 transition-all"
             >
               Sign up
             </button>

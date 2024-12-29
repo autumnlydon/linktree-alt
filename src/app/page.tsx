@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import Auth from '@/components/Auth';
-import Navigation from '../components/Navigation';
+import Navigation from '../../src/components/Navigation';
 
 interface TopProfile {
   username: string;
